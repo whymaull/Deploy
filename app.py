@@ -3,6 +3,7 @@ from flask_cors import CORS # type: ignore
 from models.schema import init_db, import_symbols
 from routes.kode_saham import symbol_bp # type: ignore
 from routes.prediksi import predict_bp # type: ignore
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -10,6 +11,7 @@ CORS(app)
 app.register_blueprint(symbol_bp)
 app.register_blueprint(predict_bp)
 
+# Inisialisasi database & import data
 init_db()
 import_symbols()
 

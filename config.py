@@ -1,9 +1,12 @@
 import os
+from urllib.parse import urlparse
+
+url = urlparse(os.environ.get("DATABASE_URL", "mysql://root@localhost/railway"))
 
 DB_CONFIG = {
-    "host": os.environ.get("MYSQLHOST", "mysql.railway.internal"),
-    "user": os.environ.get("MYSQLUSER", "root"),
-    "password": os.environ.get("MYSQLPASSWORD", "SNLPJJsJpjsDEuYxTtTikbUGuIaoNcSy"),
-    "database": os.environ.get("MYSQLDATABASE", "railway"),
-    "port": int(os.environ.get("MYSQLPORT", 3306))
+    "host": url.hostname,
+    "user": url.username,
+    "password": url.password,
+    "database": url.path[1:],  # hapus '/' di awal path
+    "port": url.port or 3306
 }

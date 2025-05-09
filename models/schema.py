@@ -5,8 +5,7 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("CREATE DATABASE IF NOT EXISTS prediksi_saham")
-    conn.database = "prediksi_saham"
+    # HAPUS create database dan conn.database
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS daftar_saham (
@@ -32,8 +31,8 @@ def init_db():
 
 def import_symbols():
     conn = get_connection()
-    conn.database = "prediksi_saham"
     cursor = conn.cursor()
+
     cursor.execute("SELECT COUNT(*) FROM daftar_saham")
     if cursor.fetchone()[0] > 0:
         return

@@ -17,7 +17,6 @@ def predict():
         forecast = predict_arima(data, periods)
 
         conn = get_connection()
-        conn.database = "prediksi_saham"
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO riwayat_prediksi (user_id, symbol, periods, forecast) VALUES (%s, %s, %s, %s)",
