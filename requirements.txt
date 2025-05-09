@@ -1,4 +1,5 @@
 flask
-pymysql
-sqlalchemy
-python-dotenv
+flask-cors
+mysql-connector-python
+yfinance
+pmdarima
