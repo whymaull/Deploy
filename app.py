@@ -1,8 +1,10 @@
 from flask import Flask
-from flask_cors import CORS # type: ignore
+from flask_cors import CORS 
 from models.schema import init_db, import_symbols
-from routes.kode_saham import symbol_bp # type: ignore
-from routes.prediksi import predict_bp # type: ignore
+from routes.kode_saham import symbol_bp 
+from routes.prediksi import predict_bp 
+from routes.auth import auth_bp 
+from routes.riwayat import riwayat_bp 
 import os
 
 app = Flask(__name__)
@@ -10,8 +12,9 @@ CORS(app)
 
 app.register_blueprint(symbol_bp)
 app.register_blueprint(predict_bp)
+app.register_blueprint(auth_bp)
+app.register_blueprint(riwayat_bp)
 
-# Inisialisasi database & import data
 init_db()
 import_symbols()
 

@@ -7,6 +7,6 @@ DB_CONFIG = {
     "host": url.hostname,
     "user": url.username,
     "password": url.password,
-    "database": url.path[1:],  # hapus '/' di awal path
+    "database": url.path[1:], 
     "port": url.port or 3306
 }

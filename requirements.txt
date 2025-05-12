@@ -7,3 +7,4 @@ yfinance
 scikit-learn
 gunicorn
 mysql-connector-python
+werkzeug
