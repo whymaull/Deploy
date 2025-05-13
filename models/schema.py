@@ -5,7 +5,6 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # HAPUS create database dan conn.database
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS daftar_saham (
@@ -20,10 +19,13 @@ def init_db():
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id VARCHAR(100) NOT NULL,
         symbol VARCHAR(10) NOT NULL,
+        start_date DATE NOT NULL,
+        period_type VARCHAR(10) NOT NULL,
         periods INT NOT NULL,
         forecast TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )""")
+
 
     conn.commit()
     cursor.close()
