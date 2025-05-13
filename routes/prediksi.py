@@ -68,7 +68,6 @@ def predict():
 
         # Simpan hasil lengkap (termasuk tanggal dan nilai prediksi)
         conn = get_connection()
-        conn.database = "prediksi_saham"
         cursor = conn.cursor()
 
         cursor.execute("""
