@@ -103,7 +103,6 @@ predict_bp = Blueprint("predict", __name__)
 
 @predict_bp.route("/predict", methods=["POST"])
 def predict():
-
     content = request.json
     symbol = content.get("symbol")
     user_id = content.get("user_id", "guest")
