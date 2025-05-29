@@ -99,6 +99,8 @@ from database.koneksi import get_connection
 from utils.prediksi_arima import get_stock_data, predict_arima
 import json
 import traceback
+from datetime import datetime
+
 
 
 predict_bp = Blueprint("predict", __name__)
