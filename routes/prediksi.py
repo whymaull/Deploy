@@ -98,6 +98,8 @@ from flask import Blueprint, request, jsonify
 from database.koneksi import get_connection
 from utils.prediksi_arima import get_stock_data, predict_arima
 import json
+import traceback
+
 
 predict_bp = Blueprint("predict", __name__)
 
@@ -173,4 +175,5 @@ def predict():
 
     except Exception as e:
         print("[ERROR]", str(e))  # Log error di Railway
+        traceback.print_exc() 
         return jsonify({"error": str(e)}), 500
