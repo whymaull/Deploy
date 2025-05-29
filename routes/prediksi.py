@@ -152,8 +152,8 @@ def predict():
 
         # Simpan ke DB
         conn = get_connection()
-        conn.database = "prediksi_saham"
         cursor = conn.cursor()
+        
         cursor.execute("""
             INSERT INTO riwayat_prediksi (user_id, symbol, start_date, period_type, periods, forecast)
             VALUES (%s, %s, %s, %s, %s, %s)
