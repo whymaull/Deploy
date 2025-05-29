@@ -103,18 +103,26 @@ predict_bp = Blueprint("predict", __name__)
 
 @predict_bp.route("/predict", methods=["POST"])
 def predict():
-    content = request.json
-    symbol = content.get("symbol")
-    user_id = content.get("user_id", "guest")
-    periods = content.get("periods", 7)
-    start_date = content.get("start_date")
-    period_type = content.get("period", "daily")
-
-    if not symbol or not start_date:
-        return jsonify({"error": "symbol dan start_date wajib diisi"}), 400
-
     try:
-        # Tentukan interval berdasarkan periode
+        content = request.json
+        print("[REQUEST]", content)
+
+        symbol = content.get("symbol")
+        user_id = content.get("user_id", "guest")
+        periods = content.get("periods", 7)
+        start_date = content.get("start_date")
+        period_type = content.get("period", "daily")
+
+        if not symbol or not start_date:
+            return jsonify({"error": "symbol dan start_date wajib diisi"}), 400
+
+        # Validasi tanggal
+        try:
+            datetime.strptime(start_date, "%Y-%m-%d")
+        except ValueError:
+            return jsonify({"error": "Format tanggal salah. Gunakan YYYY-MM-DD"}), 400
+
+        # Interval berdasarkan periode
         interval_map = {
             "daily": "1d",
             "weekly": "1wk",
@@ -122,15 +130,12 @@ def predict():
         }
         interval = interval_map.get(period_type, "1d")
 
-        # Ambil data historis saham dengan interval sesuai
+        print(f"[INFO] Mendapatkan data untuk {symbol} sampai {start_date} (interval: {interval})")
         data = get_stock_data(f"{symbol}.JK", end=start_date, interval=interval)
 
-        if data is None:
-            return jsonify({
-                "error": "Data historis tidak ditemukan untuk symbol dan tanggal tersebut."
-            }), 400
+        if data is None or data.empty:
+            return jsonify({"error": "Data historis tidak ditemukan."}), 400
 
-        # Lakukan prediksi
         result = predict_arima(
             data,
             n_periods=periods,
@@ -138,11 +143,13 @@ def predict():
             period_type=period_type
         )
 
-        # Simpan ke database
+        if not result:
+            return jsonify({"error": "Prediksi gagal dijalankan."}), 500
+
+        # Simpan ke DB
         conn = get_connection()
         conn.database = "prediksi_saham"
         cursor = conn.cursor()
-
         cursor.execute("""
             INSERT INTO riwayat_prediksi (user_id, symbol, start_date, period_type, periods, forecast)
             VALUES (%s, %s, %s, %s, %s, %s)
@@ -165,4 +172,5 @@ def predict():
         })
 
     except Exception as e:
+        print("[ERROR]", str(e))  # Log error di Railway
         return jsonify({"error": str(e)}), 500
